@@ -1,0 +1,150 @@
+/*  Jonathan O'Leary
+ *  COP3503 Computer Science 2
+ *  Programming Assignment 2 Driver
+ *  Fall 2022
+ */
+
+package dd.railroaddriver;
+
+import java.io.*;
+import java.util.*;
+
+class Railroad 
+{
+    private String fileName;            // -- String that will store the file name
+    private String [][] vertexTable;    // -- A 2D table of Strible that will store 
+                                        //  the points we wnat to navigate accross
+    private int [] costTable;           // -- A int table that will keep track of the cost between
+                                        //  two points
+    private int tableLength;             // -- This variable holds the length of the table
+    
+    
+    Railroad(int numTracks, String railroad1txt) throws FileNotFoundException 
+    {
+        //Set the Table Length
+        this.tableLength = numTracks - 1;
+        
+        // Set Filename to String provided
+        this.fileName = railroad1txt;
+        
+        // This will create the table that stores that 2 vertex's
+        this.vertexTable = new String[numTracks][2];
+        
+        // This will create the table that will keep track of the cost. 
+        this.costTable = new int[numTracks];
+        
+        // Call the Function that loads in the Data
+        dataLoad();
+    }
+
+    
+    // Simple Data Load Function, Reads a file format. 
+    private void dataLoad() throws FileNotFoundException 
+    {
+        //System.out.println("Loading Data from " + fileName + ". . .");
+        
+        /*Trusty old Scanner*/
+        Scanner sc= new Scanner(new BufferedReader(new FileReader(fileName)));
+        
+        String v1 ;
+        String v2 ;
+        int cost ;
+        int tableCounter = 0;
+        
+        while(sc.hasNextLine())
+        {
+            // If it cannot find a character it breaks
+            if (sc.hasNext() != true)
+            {
+                break;
+            }
+            
+            v1 = sc.next();
+            //System.out.println(v1);
+            
+            v2 = sc.next();
+            //System.out.println(v2);
+            
+            cost = sc.nextInt();
+            //System.out.println(cost);
+            
+            // Vertex - Vertex - Cost
+            vertexTable[tableCounter][0] = v1;
+            vertexTable[tableCounter][1] = v2;
+            costTable[tableCounter] = cost;
+            
+            tableCounter++;
+        }
+    }
+    
+    String buildRailroad() 
+    {
+        String returnString = "NULL";
+        // mergeSortEdgeWieght(costTable, 0, tableLength);
+        
+        return returnString;
+    }
+    
+    void mergeSortEdgeWieght(int[] array, int left, int right)
+    {
+        if (left < right) {
+            // Find the middle point
+            int mid = left + (right - left) / 2;
+ 
+            // Sort first and second halves
+            mergeSortEdgeWieght(array, left, mid);
+            mergeSortEdgeWieght(array, mid + 1, right);
+ 
+            // Merge the sorted halves
+            combine(array, left, mid, right);
+        }
+    }
+
+    void combine(int[] array, int left, int mid, int right)
+    {
+         // Find sizes of two subarrays to be merged
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+ 
+        /* Create temp arrays */
+        int L[] = new int[n1];
+        int R[] = new int[n2];
+ 
+        /*Copy data to temp arrays*/
+        for (int i = 0; i < n1; ++i)
+            L[i] = array[left + i];
+        for (int j = 0; j < n2; ++j)
+            R[j] = array[mid + 1 + j];
+ 
+        // Initial indexes of first and second subarrays
+        int i = 0, j = 0;
+ 
+        // Initial index of merged subarray array
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (L[i] >= R[j]) {
+                array[k] = L[i];
+                i++;
+            }
+            else {
+                array[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+ 
+        /* Copy remaining elements of L[] if any */
+        while (i < n1) {
+            array[k] = L[i];
+            i++;
+            k++;
+        }
+ 
+        /* Copy remaining elements of R[] if any */
+        while (j < n2) {
+            array[k] = R[j];
+            j++;
+            k++;
+        }
+    }  
+}
